@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file webform_prepopulate.module
+ * TODO: Enter file description here.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function webform_prepopulate_form_alter(&$form, &$form_state, $form_id) {
+  if ((isset($form['#submission']) && empty($form['#submission'])) && isset($form['#node']->type) && strpos($form_id, 'webform_client_form_') === 0 && in_array($form['#node']->type, webform_variable_get('webform_node_types'))) {
+    $components = $form['#node']->webform['components'];
+    $parameters = drupal_get_query_parameters();
+    foreach ($components as $idx => $component) {
+      $component_key = $component['form_key'];
+      if (!empty($parameters[$component_key]) && !$component['extra']['private']) {
+        $form['submitted'][$component_key]['#default_value'] = check_plain($parameters[$component_key]);
+      }
+    }
+  }
+}

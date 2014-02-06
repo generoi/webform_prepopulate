@@ -1,0 +1,5 @@
+name = Webform Prepopulate
+description = Prepopulate defaults for webform components
+dependencies[] = webform
+package = custom
+core = 7.x
